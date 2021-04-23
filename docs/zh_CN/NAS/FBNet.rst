@@ -68,11 +68,17 @@ PFLD是一种面向实时应用的、轻量型人脸关键点模型，其网络�
 1. 搜索预训练
 ^^^^^^^^^
 
-首先构建搜索训练环境。
+首先构建搜索训练环境，基本的环境依赖如下：
 
 .. code-block:: bash
 
-   pip install -r ./requirements
+   numpy==1.18.5
+   opencv-python==4.5.1.48
+   torch==1.6.0
+   torchvision==0.7.0
+   onnx==1.8.1
+   onnx-simplifier==0.3.5
+   onnxruntime==1.7.0
 
 基于PFLD的基础模型结构，不同阶段的搜索空间设置、以及搜索训练相关的参数配置，参考 `示例 <https://github.com/microsoft/nni/tree/master/examples/nas/oneshot/fbnet/lib/config.py>`__
 
