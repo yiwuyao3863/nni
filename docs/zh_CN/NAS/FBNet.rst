@@ -13,18 +13,18 @@ FBNet是一种可微分的、模块级的网络结构搜索方法，通过Gumbel
    :alt:
 
 
-PFLD是一种面向移动端应用的、轻量型人脸关键点模型，其网络主干基于MobileNet-V2设计。我们首先简化了PFLD的基本结构，其中Stem-block选自PeleeNet，Average pooling通过Depthwise Convolution实现，并且引入了eSE module以提升计算效率。
+PFLD是一种面向实时应用的、轻量型人脸关键点模型，其网络主干基于MobileNet-V2设计。我们首先简化了PFLD的基本结构，其中Stem-block选自PeleeNet，Average pooling通过Depthwise Convolution实现，并且引入了eSE module以提升计算效率。
 
-为了进一步实现精度与速度的有效折中，我们将FBNet的搜索策略，应用于PFLD关键网络层的模块级搜索。并且，基于FBNet的搜索空间（FBNet space），通过基本构建模块的优化，可以确保移动端部署时的推理速度，基本优化点包括Average pooling通过Depthwise Convolution实现，eSE module的使用等。
+为了进一步实现精度与速度的有效折中，我们将FBNet的搜索策略，应用于PFLD关键网络层的模块级搜索。并且，我们基于FBNet的搜索空间（FBNet space），优化了一些基本构建模块，可以确保移动端部署时的推理速度，基本优化点包括Average pooling通过Depthwise Convolution实现、eSE module的使用等。
 
 实验结果
 ------------------
 
-为了检验PFLD的精度稳健性、以及FBNet的搜索效果，我们选择包含106关键点的公开数据集作为场景验证，数据集介绍如下：
+为了检验PFLD的精度稳健性、以及FBNet的搜索效果，我们选择包含106关键点的公开数据集作为验证场景，数据集介绍如下：
 
 * `Grand Challenge of 106-Point Facial Landmark Localization <https://arxiv.org/abs/1905.03469>`__
 
-基线模型以MobileNet-V3为主干，表示为MobileNet-V3 PFLD（`参考开源实现 <https://github.com/Hsintao/pfld_106_face_landmarks>`__）。搜索模型通过超网络预训练、子网络采样与微调获得，表示为Subnet。搜索结果如下，其中推理延迟的测试平台为高通625处理器：
+选择的基线模型以MobileNet-V3为主干，表示为MobileNet-V3 PFLD（`参考开源实现 <https://github.com/Hsintao/pfld_106_face_landmarks>`__）。搜索模型通过超网络预训练、子网络采样与微调获得，表示为Subnet。搜索结果如下，其中推理延迟的测试平台为高通625处理器：
 
 .. list-table::
    :header-rows: 1
@@ -33,7 +33,7 @@ PFLD是一种面向移动端应用的、轻量型人脸关键点模型，其网�
    * - Model
      - Size
      - Latency
-     - NME
+     - Validation NME
    * - MobileNet-V3 PFLD
      - 1.01MB
      - 10ms
@@ -68,13 +68,13 @@ PFLD是一种面向移动端应用的、轻量型人脸关键点模型，其网�
 1. 搜索预训练
 ^^^^^^^^^
 
-首先构建搜索环境。
+首先构建搜索训练环境。
 
 .. code-block:: bash
 
    pip install -r ./requirements
 
-基于PFLD的基础模型结构，不同阶段的搜索空间设置、以及搜索训练相关的参数配置，参考`示例 <https://github.com/microsoft/nni/tree/master/examples/nas/oneshot/fbnet/lib/config.py>`__
+基于PFLD的基础模型结构，不同阶段的搜索空间设置、以及搜索训练相关的参数配置，参考 `示例 <https://github.com/microsoft/nni/tree/master/examples/nas/oneshot/fbnet/lib/config.py>`__
 
 在指定搜索空间与参数配置之后，可以通过运行以下命令，执行网络结构搜索、与超网络预训练：
 
