@@ -82,7 +82,7 @@ PFLD是一种面向实时应用的、轻量型人脸关键点模型，其网络�
 
    python train.py --net "supernet" -as --dev_id "0,1" --snapshot "./ckpt_save" --data_root "./data/106points"
 
-搜索训练过程中会显示验证精度，训练的最佳超网络保存为``./ckpt_save/supernet/checkpoint_min_nme.pth``。
+搜索训练过程中会显示验证精度，训练的最佳超网络保存为 ``./ckpt_save/supernet/checkpoint_min_nme.pth``。
 
 
 2. 子网络微调
@@ -95,7 +95,7 @@ PFLD是一种面向实时应用的、轻量型人脸关键点模型，其网络�
    python train.py --net "subnet" --dev_id "0,1" --snapshot "./ckpt_save" --data_root "./data/106points" \
                    --supernet "./ckpt_save/supernet/checkpoint_min_nme.pth"
 
-微调训练过程中会显示验证精度，训练的最佳子网络保存为``./ckpt_save/subnet/checkpoint_min_nme.pth``。
+微调训练过程中会显示验证精度，训练的最佳子网络保存为 ``./ckpt_save/subnet/checkpoint_min_nme.pth``。
 
 
 3. 导出ONNX模型
@@ -108,7 +108,7 @@ PFLD是一种面向实时应用的、轻量型人脸关键点模型，其网络�
    python export.py --supernet "./ckpt_save/supernet/checkpoint_min_nme.pth" \
                     --resume "./ckpt_save/subnet/checkpoint_min_nme.pth"
 
-ONNX模型保存为``./output/subnet.onnx``，可进一步通过`MNN <https://github.com/alibaba/MNN>`__转换为移动端推理引擎。
+ONNX模型保存为 ``./output/subnet.onnx``，可进一步通过 `MNN <https://github.com/alibaba/MNN>`__ 转换为移动端推理引擎。
 
 我们提供了超网络预训练模型、与子网络微调模型：
 
