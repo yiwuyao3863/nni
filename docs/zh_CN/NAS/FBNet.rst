@@ -12,6 +12,7 @@ FBNet是一种可微分的、模块级的网络结构搜索方法，通过Gumbel
    :target: ../../img/fbnet.png
    :alt:
 
+
 PFLD是一种面向移动端应用的、轻量型人脸关键点模型，其网络主干基于MobileNet-V2设计。我们首先简化了PFLD的基本结构，其中Stem-block选自PeleeNet，Average pooling通过Depthwise Convolution实现，并且引入了eSE module以提升计算效率。
 
 为了进一步实现精度与速度的有效折中，我们将FBNet的搜索策略，应用于PFLD关键网络层的模块级搜索。并且，基于FBNet的搜索空间（FBNet space），通过基本构建模块的优化，可以确保移动端部署时的推理速度，基本优化点包括Average pooling通过Depthwise Convolution实现，eSE module的使用等。
