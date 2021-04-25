@@ -7,7 +7,7 @@ For the mobile application of facial landmark, based on the basic architecture o
 * `FBNet: Hardware-Aware Efficient ConvNet Design via Differentiable Neural Architecture Search <https://arxiv.org/abs/1812.03443>`__
 * `PFLD: A Practical Facial Landmark Detector <https://arxiv.org/abs/1902.10859>`__
 
-FBNet is a block-wise differentiable NAS method (Block-wise DNAS), where the best candidate buildding block can be chosen by using Gumbel Softmax random sampling and differentiable training. At each layer (or stage) to be searched, the diverse candidate blocks are side by side planed (just like the effectiveness of structural re-parameterization), leading to sufficient pre-training of the supernet. The pre-trained supernet is further sampled for finetuning of the subnet, to achieve better performance.
+FBNet is a block-wise differentiable NAS method (Block-wise DNAS), where the best candidate buildding blocks can be chosen by using Gumbel Softmax random sampling and differentiable training. At each layer (or stage) to be searched, the diverse candidate blocks are side by side planed (just like the effectiveness of structural re-parameterization), leading to sufficient pre-training of the supernet. The pre-trained supernet is further sampled for finetuning of the subnet, to achieve better performance.
 
 .. image:: ../../img/fbnet.png
    :target: ../../img/fbnet.png
@@ -86,7 +86,7 @@ The Python dependencies are listed as below:
    onnx-simplifier==0.3.5
    onnxruntime==1.7.0
 
-Based on the architecture of simplified PFLD, the setting of multi-stage search space and hyper-parameters for searching is referred to `configuration <https://github.com/microsoft/nni/tree/master/examples/nas/oneshot/fbnet/lib/config.py>`__ .
+Based on the architecture of simplified PFLD, the setting of multi-stage search space and hyper-parameters for searching should be configured, referred to `configuration <https://github.com/microsoft/nni/tree/master/examples/nas/oneshot/fbnet/lib/config.py>`__ .
 
 After specifying the search space and hyper-parameters, we can run below command to start the searching and training of supernet:
 
@@ -120,7 +120,7 @@ After the finetuning of subnet, we can run below command to export the ONNX mode
    python export.py --supernet "./ckpt_save/supernet/checkpoint_min_nme.pth" \
                     --resume "./ckpt_save/subnet/checkpoint_min_nme.pth"
 
-ONNX is saved as ``./output/subnet.onnx``, which can be further converted to the mobile inference engine by using `MNN <https://github.com/alibaba/MNN>`__ .
+ONNX model is saved as ``./output/subnet.onnx``, which can be further converted to the mobile inference engine by using `MNN <https://github.com/alibaba/MNN>`__ .
 
 The checkpoints of pre-trained supernet and subnet are offered as below:
 
