@@ -1,5 +1,5 @@
 FBNet
-=======================================================================================
+======
 
 For the mobile application of facial landmark, based on the basic architecture of PFLD model, we have applied the FBNet (Block-wise DNAS) to design an concise model with the trade-off between latency and accuray. References are listed as below:
 
@@ -20,7 +20,7 @@ To achieve better trade-off between latency and accuray, the FBNet is applied on
 
 
 Experiments
-------------------
+------------
 
 To verify the effectiveness of FBNet applied on PFLD, we choose the open source dataset with 106 landmark points as the benchmark:
 
@@ -50,13 +50,13 @@ The baseline model is denoted as MobileNet-V3 PFLD (`Reference baseline <https:/
 Example
 --------
 
-`Example code <https://github.com/microsoft/nni/tree/master/examples/nas/oneshot/fbnet>`__
+`Example code <https://github.com/microsoft/nni/tree/master/examples/nas/oneshot/pfld>`__
 
 Please run the following scripts at the example directory.
 
 
 Data Preparation
-----------------
+-----------------
 
 Firstly, you should download the dataset `106points dataset <https://drive.google.com/file/d/1I7QdnLxAlyG2Tq3L66QYzGhiBEoVfzKo/view?usp=sharing>`__ to the path ``./data/106points`` . The dataset includes the train-set and test-set:
 
@@ -71,8 +71,8 @@ Firstly, you should download the dataset `106points dataset <https://drive.googl
 Quik Start
 -----------
 
-1. Exploration training
-^^^^^^^^^
+1. Search
+^^^^^^^^^^
 
 The Python dependencies are listed as below:
 
@@ -86,39 +86,61 @@ The Python dependencies are listed as below:
    onnx-simplifier==0.3.5
    onnxruntime==1.7.0
 
-Based on the architecture of simplified PFLD, the setting of multi-stage search space and hyper-parameters for searching should be configured, referred to `configuration <https://github.com/microsoft/nni/tree/master/examples/nas/oneshot/fbnet/lib/config.py>`__ .
+Based on the architecture of simplified PFLD, the setting of multi-stage search space and hyper-parameters for searching should be configured to construct the supernet:
 
-After specifying the search space and hyper-parameters, we can run below command to start the searching and training of supernet:
+.. code-block:: bash
+   from lib.builder import search_space
+   from lib.ops import PRIMITIVES
+   from lib.supernet import PFLDInference, AuxiliaryNet
+   from nni.algorithms.nas.pytorch.fbnet import LookUpTable, NASConfig,
+
+   # configuration of hyper-parameters
+   nas_config = NASConfig(
+          arch_search=True,
+          model_dir="./ckpt_save",
+          nas_lr=0.01,
+          mode="mul",
+          alpha=0.25,
+          beta=0.8,
+          search_space=search_space,
+      )
+   # lookup table to manage the information
+   lookup_table = LookUpTable(config=nas_config, primitives=PRIMITIVES)
+   # created supernet
+   pfld_backbone = PFLDInference(lookup_table)
+
+
+After creation of the supernet with the specification of the search space and hyper-parameters, we can run below command to start the searching and training of supernet:
 
 .. code-block:: bash
 
    python train.py --net "supernet" -as --dev_id "0,1" --snapshot "./ckpt_save" --data_root "./data/106points"
 
-The validation accuray will be shown during training, and the model with best accuray will be saved as ``./ckpt_save/supernet/checkpoint_min_nme.pth``.
+The validation accuray will be shown during training, and the model with best accuray will be saved as ``./ckpt_save/supernet/checkpoint_best.pth``.
 
 
-2. Finetune the sampled model
-^^^^^^^^^^^
+2. Finetune
+^^^^^^^^^^^^
 
 After the pre-training of supernet, we can run below command to sample the subnet and conduct the finetuning:
 
 .. code-block:: bash
 
    python train.py --net "subnet" --dev_id "0,1" --snapshot "./ckpt_save" --data_root "./data/106points" \
-                   --supernet "./ckpt_save/supernet/checkpoint_min_nme.pth"
+                   --supernet "./ckpt_save/supernet/checkpoint_best.pth"
 
-The validation accuray will be shown during training, and the model with best accuray will be saved as ``./ckpt_save/subnet/checkpoint_min_nme.pth``。
+The validation accuray will be shown during training, and the model with best accuray will be saved as ``./ckpt_save/subnet/checkpoint_best.pth``。
 
 
-3. Export the ONNX model
-^^^^^^^^^
+3. Export
+^^^^^^^^^^
 
 After the finetuning of subnet, we can run below command to export the ONNX model:
 
 .. code-block:: bash
 
-   python export.py --supernet "./ckpt_save/supernet/checkpoint_min_nme.pth" \
-                    --resume "./ckpt_save/subnet/checkpoint_min_nme.pth"
+   python export.py --supernet "./ckpt_save/supernet/checkpoint_best.pth" \
+                    --resume "./ckpt_save/subnet/checkpoint_best.pth"
 
 ONNX model is saved as ``./output/subnet.onnx``, which can be further converted to the mobile inference engine by using `MNN <https://github.com/alibaba/MNN>`__ .
 
