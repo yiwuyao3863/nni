@@ -89,6 +89,7 @@ The Python dependencies are listed as below:
 Based on the architecture of simplified PFLD, the setting of multi-stage search space and hyper-parameters for searching should be configured to construct the supernet:
 
 .. code-block:: bash
+
    from lib.builder import search_space
    from lib.ops import PRIMITIVES
    from lib.supernet import PFLDInference, AuxiliaryNet
