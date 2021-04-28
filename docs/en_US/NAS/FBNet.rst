@@ -96,6 +96,7 @@ Based on the architecture of simplified PFLD, the setting of multi-stage search 
    from nni.algorithms.nas.pytorch.fbnet import LookUpTable, NASConfig,
 
    # configuration of hyper-parameters
+   # search_space defines the multi-stage search space
    nas_config = NASConfig(
           arch_search=True,
           model_dir="./ckpt_save",
