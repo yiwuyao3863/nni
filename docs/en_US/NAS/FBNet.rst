@@ -54,6 +54,17 @@ Example
 
 Please run the following scripts at the example directory.
 
+The Python dependencies are listed as below:
+
+.. code-block:: bash
+
+   numpy==1.18.5
+   opencv-python==4.5.1.48
+   torch==1.6.0
+   torchvision==0.7.0
+   onnx==1.8.1
+   onnx-simplifier==0.3.5
+   onnxruntime==1.7.0
 
 Data Preparation
 -----------------
@@ -73,18 +84,6 @@ Quik Start
 
 1. Search
 ^^^^^^^^^^
-
-The Python dependencies are listed as below:
-
-.. code-block:: bash
-
-   numpy==1.18.5
-   opencv-python==4.5.1.48
-   torch==1.6.0
-   torchvision==0.7.0
-   onnx==1.8.1
-   onnx-simplifier==0.3.5
-   onnxruntime==1.7.0
 
 Based on the architecture of simplified PFLD, the setting of multi-stage search space and hyper-parameters for searching should be configured to construct the supernet:
 
